@@ -1,0 +1,6 @@
+{
+  "name": "filesort",
+  "bin": {
+    "filesort": "./bin/filesort.js"
+  }
+}
