@@ -18,7 +18,7 @@ function moveFilesInstructions() {
 function moveFilesUserInput() {
     process.stdin.once('data', (chunk) => {
         const args = chunk.toString().trim().split(/\s+/);
-        // console.log(args);
+        // console.log(args); //program debugging
 
         directoryCreation(args);
     });
@@ -63,7 +63,7 @@ function moveMyFiles(currentDir, newDir, rest) {
         rest.map(item => item.replace(/\./g, ''))
     )];
 
-    console.log(cleanExtensions);
+    console.log(cleanExtensions); //program debugging
 
     let count = 0;
     
@@ -82,7 +82,7 @@ function moveMyFiles(currentDir, newDir, rest) {
         files.push(...dirFiles);
     }
 
-    console.log(files);
+    console.log(files); //program debugging
     
     if (files.length > 0) {
         for (const file of files) {

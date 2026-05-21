@@ -36,8 +36,6 @@ function listFiles() {
 }
 
 
-
-
 // EXPORTS
 module.exports = {
     listFiles
