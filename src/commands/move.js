@@ -1,29 +1,19 @@
 const { normalizePath } = require('../utils/paths');
+const { prompt } = require('../utils/userPrompts');
+
 
 const fs = require('fs');
 const path = require('path');
 
 const currentFile = path.basename(__filename);
 
-
-
 function moveFilesInstructions() {
 
-    process.stdout.write("MOVE: <starting directory path> <new directory> <file extensions> \n\n", "UTF-8");
-
-    moveFilesUserInput();
-
-}
-
-function moveFilesUserInput() {
-    process.stdin.once('data', (chunk) => {
-        const args = chunk.toString().trim().split(/\s+/);
-        // console.log(args);
-
-        directoryCreation(args);
+    prompt('move').then((userInput) => {
+        directoryCreation(userInput);
     });
-}
 
+}
 
 
 function directoryCreation(args) {
@@ -34,20 +24,19 @@ function directoryCreation(args) {
     if (!currentDir || !newDir || rest.length === 0) {
         console.log('Usage: <starting directory path> <new directory> <file extensions>');
 
-        moveFilesUserInput();
+        moveFilesInstructions();
 
         return;
     } else if  (fs.existsSync(currentDir)) {
         const createdDir = path.resolve(currentDir, newDir);
 
+        try {
+            fs.mkdirSync(createdDir, { recursive: true });
+            moveMyFiles(currentDir, newDir, rest);
 
-        fs.mkdir(createdDir, { recursive: true }, (err) => {
-            if (err) {
-                console.log(err);
-            } else {
-                moveMyFiles(currentDir, newDir, rest);
-            }
-        });
+        } catch (err) {
+            console.log(err);
+        }
 
     } else {
         console.log("Please provide a correct starting directory");
@@ -63,7 +52,7 @@ function moveMyFiles(currentDir, newDir, rest) {
         rest.map(item => item.replace(/\./g, ''))
     )];
 
-    console.log(cleanExtensions);
+    console.log(cleanExtensions); //program debugging
 
     let count = 0;
     
@@ -82,7 +71,7 @@ function moveMyFiles(currentDir, newDir, rest) {
         files.push(...dirFiles);
     }
 
-    console.log(files);
+    console.log(files); //program debugging
     
     if (files.length > 0) {
         for (const file of files) {
@@ -104,7 +93,10 @@ function moveMyFiles(currentDir, newDir, rest) {
         console.log(`Please check that the extensions are correct: ${rest}`)
     }
 
+
 }
+
+
 
 
 // EXPORTS

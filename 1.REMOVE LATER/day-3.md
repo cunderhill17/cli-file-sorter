@@ -10,7 +10,7 @@
 
 Additions To Implement: 
 1. I want to start setting up the file structure to start putting the code into separate files (modules)
-2. Then I want to create the help() function to show the menu options (there many not be many options yet)
+2. Then I want to create the help() function to show the menu options (there may not be many options yet)
 3. If I have time I want to work on a solution for moving files to a previous folder 
 
 **Steps:** 
