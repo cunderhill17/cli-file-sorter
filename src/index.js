@@ -1,12 +1,30 @@
 // Importing program files
-const { chooseCommand } = require('./utils/commands');
-
-const fs = require('fs');
+const { moveFilesInstructions } = require('./commands/move');
+const { listFiles } = require('./commands/list');
+const { showHelp } = require('./commands/help');
 
 const [command, ...rest] = process.argv.slice(2);
 
 
-chooseCommand(command);
+function userCommand(command) {
+    switch (command?.toLowerCase()) {
+        case 'move':
+            moveFilesInstructions();
+            break;
 
+        case 'list':
+            listFiles();
+            break;
+        
+        case 'exit':
+            process.exit(0);
+
+        default:
+            showHelp();
+            break;
+    }
+}
+
+userCommand(command);
 
 
