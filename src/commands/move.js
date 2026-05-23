@@ -1,5 +1,6 @@
 const { normalizePath } = require('../utils/paths');
 const { prompt } = require('../utils/userPrompts');
+const { dirExists, createDir } = require('../utils/dirCreation');
 
 
 const fs = require('fs');
@@ -7,54 +8,53 @@ const path = require('path');
 
 const currentFile = path.basename(__filename);
 
-function moveFilesInstructions() {
+async function moveFilesInstructions({userCommand}) {
 
-    prompt('move').then((userInput) => {
-        directoryCreation(userInput);
-    });
+    const userInput = await prompt('move');
+    await directoryCreation(userInput);
+
+    const [newCommand, ...rest] = await prompt('noCommand');
+    !newCommand ? process.exit(0) : userCommand(newCommand);
 
 }
 
 
-function directoryCreation(args) {
+async function directoryCreation(args) {
     let [currentDir, newDir, ...rest] = args;
 
     currentDir = normalizePath(currentDir);
-
-    if (!currentDir || !newDir || rest.length === 0) {
+        
+    while(!currentDir || !newDir || rest.length === 0) {
         console.log('Usage: <starting directory path> <new directory> <file extensions>');
+        let newInput = await prompt('move');
+        [currentDir, newDir, ...rest] = newInput;
+        currentDir = normalizePath(currentDir);
+    }
 
-        moveFilesInstructions();
+    while (!dirExists(currentDir)) {
+        const userInput = await prompt('correctDir');
+        [currentDir] = userInput;
+        currentDir = normalizePath(currentDir);
+    }
 
-        return;
-    } else if  (fs.existsSync(currentDir)) {
-        const createdDir = path.resolve(currentDir, newDir);
-
-        try {
-            fs.mkdirSync(createdDir, { recursive: true });
-            moveMyFiles(currentDir, newDir, rest);
-
-        } catch (err) {
-            console.log(err);
-        }
-
-    } else {
-        console.log("Please provide a correct starting directory");
+    try {
+        createDir(currentDir, newDir);
+        moveMyFiles(currentDir, newDir, rest);
+    } catch (err) {
+        console.log(err)
     }
 
 }
 
 
 function moveMyFiles(currentDir, newDir, rest) {
-    let files = [];
+    let count = 0;
 
     const cleanExtensions = [...new Set(
         rest.map(item => item.replace(/\./g, ''))
     )];
 
-    console.log(cleanExtensions); //program debugging
-
-    let count = 0;
+    console.log(cleanExtensions);
     
     let fileGroup = fs.readdirSync(currentDir).filter(file => {
         const fullPath = path.join(currentDir, file);
@@ -65,35 +65,32 @@ function moveMyFiles(currentDir, newDir, rest) {
         );
     });
 
-    for (const item of cleanExtensions) {
-        let dirFiles = fileGroup.filter(file => file.endsWith(`.${item}`) );
-        
-        files.push(...dirFiles);
+    console.log(fileGroup);
+
+    const files = fileGroup.filter(file => (
+        cleanExtensions.some(ext => file.endsWith(`.${ext}`))
+    ));
+
+    if (files.length === 0) {
+        console.log('There are no files that match the extension(s) in the current directory.');
+        console.log(`Please check that the extensions are correct: ${rest}`);
+        return;
     }
 
-    console.log(files); //program debugging
-    
-    if (files.length > 0) {
-        for (const file of files) {
-            let oldPath = path.join(currentDir, file); 
-            let targetDir = path.resolve(currentDir, newDir);
-            let newPath = path.join(targetDir, file);
+    for (const file of files) {
+        let oldPath = path.join(currentDir, file); 
+        let targetDir = path.resolve(currentDir, newDir);
+        let newPath = path.join(targetDir, file);
 
-            try {
-                fs.renameSync(oldPath, newPath);
-                count++;
-            } catch(err) {
-                console.log(`Failed to move: ${file}`, err);
-            }
+        try {
+            fs.renameSync(oldPath, newPath);
+            count++;
+        } catch(err) {
+            console.log(`Failed to move: ${file}`, err);
         }
-
-        console.log(`${count} file(s) were moved`);
-    } else {
-        console.log('There are no files that match the extenion(s) in the current directory.');
-        console.log(`Please check that the extensions are correct: ${rest}`)
     }
 
-
+    console.log(`${count} file(s) were moved`);
 }
 
 
