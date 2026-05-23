@@ -48,15 +48,13 @@ async function directoryCreation(args) {
 
 
 function moveMyFiles(currentDir, newDir, rest) {
-    let files = [];
+    let count = 0;
 
     const cleanExtensions = [...new Set(
         rest.map(item => item.replace(/\./g, ''))
     )];
 
-    console.log(cleanExtensions); //program debugging
-
-    let count = 0;
+    console.log(cleanExtensions);
     
     let fileGroup = fs.readdirSync(currentDir).filter(file => {
         const fullPath = path.join(currentDir, file);
@@ -67,35 +65,32 @@ function moveMyFiles(currentDir, newDir, rest) {
         );
     });
 
-    for (const item of cleanExtensions) {
-        let dirFiles = fileGroup.filter(file => file.endsWith(`.${item}`) );
-        
-        files.push(...dirFiles);
-    }
+    console.log(fileGroup);
 
-    console.log(files); //program debugging
-    
-    if (files.length > 0) {
-        for (const file of files) {
-            let oldPath = path.join(currentDir, file); 
-            let targetDir = path.resolve(currentDir, newDir);
-            let newPath = path.join(targetDir, file);
+    const files = fileGroup.filter(file => (
+        cleanExtensions.some(ext => file.endsWith(`.${ext}`))
+    ));
 
-            try {
-                fs.renameSync(oldPath, newPath);
-                count++;
-            } catch(err) {
-                console.log(`Failed to move: ${file}`, err);
-            }
-        }
-
-        console.log(`${count} file(s) were moved`);
-    } else {
+    if (files.length === 0) {
         console.log('There are no files that match the extension(s) in the current directory.');
-        console.log(`Please check that the extensions are correct: ${rest}`)
+        console.log(`Please check that the extensions are correct: ${rest}`);
+        return;
     }
 
+    for (const file of files) {
+        let oldPath = path.join(currentDir, file); 
+        let targetDir = path.resolve(currentDir, newDir);
+        let newPath = path.join(targetDir, file);
 
+        try {
+            fs.renameSync(oldPath, newPath);
+            count++;
+        } catch(err) {
+            console.log(`Failed to move: ${file}`, err);
+        }
+    }
+
+    console.log(`${count} file(s) were moved`);
 }
 
 
