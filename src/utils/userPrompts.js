@@ -9,6 +9,7 @@ const fs = require('fs');
 // Variables 
 const commandArr = {
     "move": "MOVE: <starting directory path> <new directory> <file extensions> \n\n",
+    "correctDir": "Please provide a correct starting directory. Your CWD is either './' or '.' \n\n",
     "noCommand": "\n\n Please select a command or hit enter to exit \n\n"
 }
 

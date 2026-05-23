@@ -1,5 +1,6 @@
 const { normalizePath } = require('../utils/paths');
 const { prompt } = require('../utils/userPrompts');
+const { dirExists, createDir } = require('../utils/dirCreation');
 
 
 const fs = require('fs');
@@ -10,7 +11,7 @@ const currentFile = path.basename(__filename);
 async function moveFilesInstructions({userCommand}) {
 
     const userInput = await prompt('move');
-    directoryCreation(userInput);
+    await directoryCreation(userInput);
 
     const [newCommand, ...rest] = await prompt('noCommand');
     !newCommand ? process.exit(0) : userCommand(newCommand);
@@ -18,30 +19,29 @@ async function moveFilesInstructions({userCommand}) {
 }
 
 
-function directoryCreation(args) {
+async function directoryCreation(args) {
     let [currentDir, newDir, ...rest] = args;
 
     currentDir = normalizePath(currentDir);
-
-    if (!currentDir || !newDir || rest.length === 0) {
+        
+    while(!currentDir || !newDir || rest.length === 0) {
         console.log('Usage: <starting directory path> <new directory> <file extensions>');
+        let newInput = await prompt('move');
+        [currentDir, newDir, ...rest] = newInput;
+        currentDir = normalizePath(currentDir);
+    }
 
-        moveFilesInstructions();
+    while (!dirExists(currentDir)) {
+        const userInput = await prompt('correctDir');
+        [currentDir] = userInput;
+        currentDir = normalizePath(currentDir);
+    }
 
-        return;
-    } else if  (fs.existsSync(currentDir)) {
-        const createdDir = path.resolve(currentDir, newDir);
-
-        try {
-            fs.mkdirSync(createdDir, { recursive: true });
-            moveMyFiles(currentDir, newDir, rest);
-
-        } catch (err) {
-            console.log(err);
-        }
-
-    } else {
-        console.log("Please provide a correct starting directory");
+    try {
+        createDir(currentDir, newDir);
+        moveMyFiles(currentDir, newDir, rest);
+    } catch (err) {
+        console.log(err)
     }
 
 }
@@ -91,7 +91,7 @@ function moveMyFiles(currentDir, newDir, rest) {
 
         console.log(`${count} file(s) were moved`);
     } else {
-        console.log('There are no files that match the extenion(s) in the current directory.');
+        console.log('There are no files that match the extension(s) in the current directory.');
         console.log(`Please check that the extensions are correct: ${rest}`)
     }
 
