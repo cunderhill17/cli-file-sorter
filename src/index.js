@@ -9,7 +9,7 @@ const [command, ...rest] = process.argv.slice(2);
 function userCommand(command) {
     switch (command?.toLowerCase()) {
         case 'move':
-            moveFilesInstructions();
+            return moveFilesInstructions({userCommand});
             break;
 
         case 'list':

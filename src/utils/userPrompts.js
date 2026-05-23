@@ -4,9 +4,6 @@
 // importing node.js modules
 const fs = require('fs');
 
-const readline = require('node:readline');
-const {stdin: input, stdout: output} = require('node:process');
-const rl = readline.createInterface({input, output});
 
 
 // Variables 
@@ -16,12 +13,17 @@ const commandArr = {
 }
 
 function prompt(sysCommand) {
-  return new Promise((resolve) => {
-    rl.question(`${commandArr[sysCommand]}`, (answer) => {
-      const userInput = answer.trim().split(/\s+/);
-      resolve(userInput);
+    const readline = require('node:readline');
+    const {stdin: input, stdout: output} = require('node:process');
+    const rl = readline.createInterface({input, output});
+
+    return new Promise((resolve) => {
+      rl.question(`${commandArr[sysCommand]}`, (answer) => {
+        const userInput = answer.trim().split(/\s+/);
+        resolve(userInput);
+        rl.close();
+      });
     });
-  });
 }
 
 // EXPORTS

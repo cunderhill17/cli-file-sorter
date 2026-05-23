@@ -7,11 +7,13 @@ const path = require('path');
 
 const currentFile = path.basename(__filename);
 
-function moveFilesInstructions() {
+async function moveFilesInstructions({userCommand}) {
 
-    prompt('move').then((userInput) => {
-        directoryCreation(userInput);
-    });
+    const userInput = await prompt('move');
+    directoryCreation(userInput);
+
+    const [newCommand, ...rest] = await prompt('noCommand');
+    !newCommand ? process.exit(0) : userCommand(newCommand);
 
 }
 
