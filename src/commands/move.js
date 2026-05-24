@@ -1,6 +1,7 @@
-const { normalizePath } = require('../utils/paths');
 const { prompt } = require('../utils/userPrompts');
+const { normalizePath } = require('../utils/paths');
 const { dirExists, createDir } = require('../utils/dirCreation');
+const { renameWithSequence } = require('../utils/renameSequence');
 
 
 const fs = require('fs');
@@ -17,6 +18,9 @@ async function moveFilesInstructions({userCommand}) {
     !newCommand ? process.exit(0) : userCommand(newCommand);
 
 }
+
+
+
 
 
 async function directoryCreation(args) {
@@ -39,7 +43,7 @@ async function directoryCreation(args) {
 
     try {
         createDir(currentDir, newDir);
-        moveMyFiles(currentDir, newDir, rest);
+        await moveMyFiles(currentDir, newDir, rest);
     } catch (err) {
         console.log(err)
     }
@@ -47,14 +51,16 @@ async function directoryCreation(args) {
 }
 
 
-function moveMyFiles(currentDir, newDir, rest) {
+
+
+
+
+async function moveMyFiles(currentDir, newDir, rest) {
     let count = 0;
 
     const cleanExtensions = [...new Set(
         rest.map(item => item.replace(/\./g, ''))
     )];
-
-    console.log(cleanExtensions);
     
     let fileGroup = fs.readdirSync(currentDir).filter(file => {
         const fullPath = path.join(currentDir, file);
@@ -64,8 +70,6 @@ function moveMyFiles(currentDir, newDir, rest) {
             file !== currentFile
         );
     });
-
-    console.log(fileGroup);
 
     const files = fileGroup.filter(file => (
         cleanExtensions.some(ext => file.endsWith(`.${ext}`))
@@ -81,6 +85,26 @@ function moveMyFiles(currentDir, newDir, rest) {
         let oldPath = path.join(currentDir, file); 
         let targetDir = path.resolve(currentDir, newDir);
         let newPath = path.join(targetDir, file);
+
+        if (fs.existsSync(newPath)) {
+            console.log(`${file} already exists!`);
+
+            const [renameOption, ...rest] = await prompt('renameOptions');
+            console.log(`You've selected rename option number: ${renameOption}`);
+
+            switch(renameOption) {
+                case '1':
+                    console.log("You've elected to not move the file");
+                    continue;
+                case '2':
+                    console.log("You've elected to rename the file in sequence");
+                    newPath = await renameWithSequence(newPath);
+                    break;
+                default:
+                    continue;
+            }
+
+        }
 
         try {
             fs.renameSync(oldPath, newPath);
