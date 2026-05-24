@@ -13,7 +13,7 @@ function userCommand(command) {
             break;
 
         case 'list':
-            listFiles();
+            return listFiles({userCommand});
             break;
         
         case 'exit':
