@@ -1,4 +1,7 @@
-function showHelp() {
+const { prompt } = require('../utils/userPrompts');
+
+
+async function showHelp({userCommand}) {
 
     console.log(
         `
@@ -11,6 +14,9 @@ function showHelp() {
 
         `
     );
+
+    const [newCommand, ...rest] = await prompt('noCommand');
+    !newCommand ? process.exit(0) : userCommand(newCommand);
 
 }
 

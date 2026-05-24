@@ -2,6 +2,7 @@
 const { moveFilesInstructions } = require('./commands/move');
 const { listFiles } = require('./commands/list');
 const { showHelp } = require('./commands/help');
+const { softDelete } = require('./commands/delete');
 
 const [command, ...rest] = process.argv.slice(2);
 
@@ -13,14 +14,18 @@ function userCommand(command) {
             break;
 
         case 'list':
-            listFiles();
+            return listFiles({userCommand});
             break;
         
         case 'exit':
             process.exit(0);
 
+        case 'delete':
+            softDelete();
+            break;
+            
         default:
-            showHelp();
+            showHelp({userCommand});
             break;
     }
 }
