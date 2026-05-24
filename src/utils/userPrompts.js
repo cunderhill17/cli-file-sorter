@@ -19,6 +19,17 @@ const commandArr = {
         Note: Any character outside of 1-2 will default to option 1
     `,
 
+    "deletionType": `
+        Please select the deletion method you'd like to use: 
+        ====================================================
+        1. Single file
+        2. Batch Files
+
+        Any character outside of 1-2 will default to the main command prompt.
+    `,
+
+    "deleteSingle": "Delete Single File: <starting directory> <file name> <file extension>",
+    "deleteBatch": "Delete Batch Files: <starting directory> <file name??> <file extension (optional)>",
 
     "noCommand": "\n\n Please select a command or hit enter to exit \n\n"
 }
