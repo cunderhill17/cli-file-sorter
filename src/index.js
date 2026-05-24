@@ -20,7 +20,7 @@ function userCommand(command) {
             process.exit(0);
 
         default:
-            showHelp();
+            showHelp({userCommand});
             break;
     }
 }
