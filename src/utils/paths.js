@@ -11,7 +11,7 @@ function extensionCleanup(extensions) {
     }
 
     return [...new Set(
-        extensions.map(item => item.replace(/\./g, '').toLowerCase())
+        extensions.map(item => item.replace(/\./g, '').toLowerCase().trim())
     )];
 }
 
