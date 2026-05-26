@@ -22,7 +22,7 @@ async function restoreFiles() {
     const trashBin = path.resolve(__dirname, '..', '..', 'trash');
     const returnPath = process.cwd();
 
-    let files = fs.readdirSync(trashBin);
+    let files = fs.readdirSync(trashBin).filter(file => file !== '.gitkeep');
 
     for (const file of files) {
         let oldPath = path.join(trashBin, file); 
