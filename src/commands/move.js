@@ -14,8 +14,8 @@ async function moveFilesInstructions({userCommand}) {
     const userInput = await prompt('move');
     await directoryCreation(userInput);
 
-    const [newCommand, ...rest] = await prompt('noCommand');
-    !newCommand ? process.exit(0) : userCommand(newCommand);
+    const [newCommand, ...unusedInput] = await prompt('noCommand');
+    !newCommand ? userCommand('exit') : userCommand(newCommand);
 
 }
 
@@ -24,14 +24,14 @@ async function moveFilesInstructions({userCommand}) {
 
 
 async function directoryCreation(args) {
-    let [currentDir, newDir, ...rest] = args;
+    let [currentDir, newDir, ...extensions] = args;
 
     currentDir = normalizePath(currentDir);
         
-    while(!currentDir || !newDir || rest.length === 0) {
-        console.log('Usage: <starting directory path> <new directory> <file extensions>');
+    while(!currentDir || !newDir || extensions.length === 0) {
+        console.log('\nUsage: <starting directory path> <new directory> <file extensions>\n');
         let newInput = await prompt('move');
-        [currentDir, newDir, ...rest] = newInput;
+        [currentDir, newDir, ...extensions] = newInput;
         currentDir = normalizePath(currentDir);
     }
 
@@ -43,7 +43,7 @@ async function directoryCreation(args) {
 
     try {
         createDir(currentDir, newDir);
-        await moveMyFiles(currentDir, newDir, rest);
+        await moveMyFiles(currentDir, newDir, extensions);
     } catch (err) {
         console.log(err)
     }
@@ -55,11 +55,11 @@ async function directoryCreation(args) {
 
 
 
-async function moveMyFiles(currentDir, newDir, rest) {
+async function moveMyFiles(currentDir, newDir, extensions) {
     let count = 0;
 
     const cleanExtensions = [...new Set(
-        rest.map(item => item.replace(/\./g, ''))
+        extensions.map(item => item.replace(/\./g, ''))
     )];
     
     let fileGroup = fs.readdirSync(currentDir).filter(file => {
@@ -76,8 +76,8 @@ async function moveMyFiles(currentDir, newDir, rest) {
     ));
 
     if (files.length === 0) {
-        console.log('There are no files that match the extension(s) in the current directory.');
-        console.log(`Please check that the extensions are correct: ${rest}`);
+        console.log('\nThere are no files that match the extension(s) in the current directory.');
+        console.log(`Please check that the extensions are correct: ${extensions}\n`);
         return;
     }
 
@@ -87,17 +87,16 @@ async function moveMyFiles(currentDir, newDir, rest) {
         let newPath = path.join(targetDir, file);
 
         if (fs.existsSync(newPath)) {
-            console.log(`${file} already exists!`);
+            console.log(`\n${file} already exists!\n`);
 
-            const [renameOption, ...rest] = await prompt('renameOptions');
-            console.log(`You've selected rename option number: ${renameOption}`);
+            const [renameOption, ...unusedPromptInput] = await prompt('renameOptions');
 
             switch(renameOption) {
                 case '1':
-                    console.log("You've elected to not move the file");
+                    console.log("\nYou've elected to not move the file\n");
                     continue;
                 case '2':
-                    console.log("You've elected to rename the file in sequence");
+                    console.log("\nYou've elected to rename the file in sequence\n");
                     newPath = await renameWithSequence(newPath);
                     break;
                 default:
@@ -110,11 +109,11 @@ async function moveMyFiles(currentDir, newDir, rest) {
             fs.renameSync(oldPath, newPath);
             count++;
         } catch(err) {
-            console.log(`Failed to move: ${file}`, err);
+            console.log(`\nFailed to move: ${file}\n`, err);
         }
     }
 
-    console.log(`${count} file(s) were moved`);
+    console.log(`\n${count} file(s) were moved\n`);
 }
 
 

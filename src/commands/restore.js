@@ -14,15 +14,16 @@ async function restoreDeletedFiles({userCommand}) {
         await restoreFiles();
     }
 
-    const [newCommand, ...rest] = await prompt('noCommand');
-    !newCommand ? process.exit(0) : userCommand(newCommand);
+    const [newCommand, ...unusedNewCommandInput] = await prompt('noCommand');
+    !newCommand ? userCommand('exit') : userCommand(newCommand);
 }
 
 async function restoreFiles() {
+    let count = 0;
     const trashBin = path.resolve(__dirname, '..', '..', 'trash');
     const returnPath = process.cwd();
 
-    let files = fs.readdirSync(trashBin);
+    let files = fs.readdirSync(trashBin).filter(file => file !== '.gitkeep');
 
     for (const file of files) {
         let oldPath = path.join(trashBin, file); 
@@ -34,10 +35,13 @@ async function restoreFiles() {
 
         try {
             fs.renameSync(oldPath, newPath);
+            count++;
         } catch(err) {
-            console.log(`Failed to restore: ${file}`, err);
+            console.log(`\nFailed to restore: ${file}\n`, err);
         }
     }
+
+    console.log(`\n${count} deleted files have been restored to your current working directory\n`)
 
 }
 
