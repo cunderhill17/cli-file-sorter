@@ -10,7 +10,7 @@ const currentFile = path.basename(__filename);
 const trashBin = path.resolve(__dirname, '..', '..', 'trash');
 
 
-async function softDelete() {
+async function softDelete({userCommand}) {
 
     const [deletionMethod, ...unusedInput] = await prompt('deletionType');
 
@@ -29,6 +29,9 @@ async function softDelete() {
             console.log("Invalid option. Returning to menu.");
             break;
     }
+
+    const [newCommand, ...rest] = await prompt('noCommand');
+    !newCommand ? process.exit(0) : userCommand(newCommand);
 
 }
 

@@ -22,11 +22,11 @@ function userCommand(command) {
             process.exit(0);
 
         case 'delete':
-            softDelete();
+            softDelete({userCommand});
             break;
 
         case 'restore':
-            restoreDeletedFiles();
+            restoreDeletedFiles({userCommand});
             break;
             
         default:

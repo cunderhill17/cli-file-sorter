@@ -6,14 +6,16 @@ const path = require('path');
 const fs = require('fs');
 
 
-async function restoreDeletedFiles() {
+async function restoreDeletedFiles({userCommand}) {
 
     const [restoreConfirmation, ...unusedInput] = await prompt('restoreFiles');
 
     if (restoreConfirmation?.toLowerCase() === 'y') {
-        restoreFiles();
+        await restoreFiles();
     }
 
+    const [newCommand, ...rest] = await prompt('noCommand');
+    !newCommand ? process.exit(0) : userCommand(newCommand);
 }
 
 async function restoreFiles() {
