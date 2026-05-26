@@ -3,6 +3,7 @@ const { moveFilesInstructions } = require('./commands/move');
 const { listFiles } = require('./commands/list');
 const { showHelp } = require('./commands/help');
 const { softDelete } = require('./commands/delete');
+const { restoreDeletedFiles } = require('./commands/restore');
 
 const [command, ...rest] = process.argv.slice(2);
 
@@ -22,6 +23,10 @@ function userCommand(command) {
 
         case 'delete':
             softDelete();
+            break;
+
+        case 'restore':
+            restoreDeletedFiles();
             break;
             
         default:
