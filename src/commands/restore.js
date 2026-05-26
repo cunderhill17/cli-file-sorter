@@ -19,6 +19,7 @@ async function restoreDeletedFiles({userCommand}) {
 }
 
 async function restoreFiles() {
+    let count = 0;
     const trashBin = path.resolve(__dirname, '..', '..', 'trash');
     const returnPath = process.cwd();
 
@@ -34,10 +35,14 @@ async function restoreFiles() {
 
         try {
             fs.renameSync(oldPath, newPath);
+            count++;
         } catch(err) {
             console.log(`\nFailed to restore: ${file}\n`, err);
+            return;
         }
     }
+
+    console.log(`\n${count} deleted files have been restored to your current working directory\n`)
 
 }
 

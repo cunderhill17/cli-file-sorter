@@ -21,7 +21,7 @@ async function softDelete({userCommand}) {
             await confirmSingleFile(singleInput);
             break;
         case '2':
-            console.log("\nYou've elected to delete a batch of files/n");
+            console.log("\nYou've elected to delete a batch of files\n");
             const batchInput = await prompt('deleteBatch');
             await confirmBatchFiles(batchInput);
             break;
