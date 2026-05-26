@@ -29,7 +29,7 @@ async function directoryCreation(args) {
     currentDir = normalizePath(currentDir);
         
     while(!currentDir || !newDir || extensions.length === 0) {
-        console.log('Usage: <starting directory path> <new directory> <file extensions>');
+        console.log('\nUsage: <starting directory path> <new directory> <file extensions>\n');
         let newInput = await prompt('move');
         [currentDir, newDir, ...extensions] = newInput;
         currentDir = normalizePath(currentDir);
@@ -76,8 +76,8 @@ async function moveMyFiles(currentDir, newDir, extensions) {
     ));
 
     if (files.length === 0) {
-        console.log('There are no files that match the extension(s) in the current directory.');
-        console.log(`Please check that the extensions are correct: ${extensions}`);
+        console.log('\nThere are no files that match the extension(s) in the current directory.');
+        console.log(`Please check that the extensions are correct: ${extensions}\n`);
         return;
     }
 
@@ -87,17 +87,16 @@ async function moveMyFiles(currentDir, newDir, extensions) {
         let newPath = path.join(targetDir, file);
 
         if (fs.existsSync(newPath)) {
-            console.log(`${file} already exists!`);
+            console.log(`\n${file} already exists!\n`);
 
             const [renameOption, ...unusedPromptInput] = await prompt('renameOptions');
-            console.log(`You've selected rename option number: ${renameOption}`);
 
             switch(renameOption) {
                 case '1':
-                    console.log("You've elected to not move the file");
+                    console.log("\nYou've elected to not move the file\n");
                     continue;
                 case '2':
-                    console.log("You've elected to rename the file in sequence");
+                    console.log("\nYou've elected to rename the file in sequence\n");
                     newPath = await renameWithSequence(newPath);
                     break;
                 default:
@@ -110,11 +109,11 @@ async function moveMyFiles(currentDir, newDir, extensions) {
             fs.renameSync(oldPath, newPath);
             count++;
         } catch(err) {
-            console.log(`Failed to move: ${file}`, err);
+            console.log(`\nFailed to move: ${file}\n`, err);
         }
     }
 
-    console.log(`${count} file(s) were moved`);
+    console.log(`\n${count} file(s) were moved\n`);
 }
 
 

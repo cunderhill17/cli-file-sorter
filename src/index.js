@@ -20,7 +20,7 @@ function userCommand(command) {
             break;
         
         case 'exit':
-            console.log('Thank you for using FileSort!');
+            console.log('\nThank you for using FileSort!\n');
             process.exit(0);
 
         case 'delete':

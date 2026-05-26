@@ -16,17 +16,17 @@ async function softDelete({userCommand}) {
 
     switch(deletionMethod) {
         case '1':
-            console.log("You've elected to delete a single file");
+            console.log("\nYou've elected to delete a single file\n");
             const singleInput = await prompt('deleteSingle');
             await confirmSingleFile(singleInput);
             break;
         case '2':
-            console.log("You've elected to delete a batch of files");
+            console.log("\nYou've elected to delete a batch of files/n");
             const batchInput = await prompt('deleteBatch');
             await confirmBatchFiles(batchInput);
             break;
         default:
-            console.log("Invalid option. Returning to menu.");
+            console.log("\nInvalid option. Returning to menu.\n");
             break;
     }
 
@@ -53,7 +53,7 @@ async function confirmSingleFile(singleInput) {
         dir = normalizePath(dir);
     }
 
-    console.log(`Please confirm that you'd like the file: ${fileName}.${cleanExtension} deleted from the ${dir} directory`);
+    console.log(`\nPlease confirm that you'd like the file: ${fileName}.${cleanExtension} deleted from the ${dir} directory\n`);
 
     const [confirmation] = await prompt('confirmation');
 
@@ -85,7 +85,7 @@ async function confirmBatchFiles(batchInput) {
         dir = normalizePath(dir);
     }
 
-    console.log(`Please confirm that you'd like all files with the .${cleanExtension} extension deleted from the ${dir} directory`);
+    console.log(`\nPlease confirm that you'd like all files with the .${cleanExtension} extension deleted from the ${dir} directory\n`);
 
     const [confirmation] = await prompt('confirmation');
 
@@ -110,7 +110,7 @@ async function deleteSingleFile(dir, fileName, extension) {
     });
 
     if (file.length === 0) {
-        console.log(`The file doesn't exist.`);
+        console.log(`\nThe file doesn't exist.\n`);
         return
     }
   
@@ -124,10 +124,10 @@ async function deleteSingleFile(dir, fileName, extension) {
     try {
         fs.renameSync(oldPath, newPath);
     } catch(err) {
-        console.log(`Failed to delete: ${file[0]}`, err);
+        console.log(`\nFailed to delete: ${file[0]}\n`, err);
     }
     
-    console.log(`Your file: ${file[0]} was deleted`);
+    console.log(`\nYour file: ${file[0]} was deleted\n`);
       
 }
 
@@ -150,7 +150,7 @@ async function deleteBatchFiles(dir, extension) {
     console.log(files);
 
     if (files.length === 0) {
-        console.log(`There are no files with the extension ${extension} to be deleted`);
+        console.log(`\nThere are no files with the extension ${extension} to be deleted\n`);
         return;
     }
 
@@ -167,11 +167,11 @@ async function deleteBatchFiles(dir, extension) {
             fs.renameSync(oldPath, newPath);
             count++;
         } catch(err) {
-            console.log(`Failed to delete: ${file}`, err);
+            console.log(`\nFailed to delete: ${file}\n`, err);
         }
     }
 
-    console.log(`${count} file(s) were deleted`);
+    console.log(`\n${count} file(s) were deleted\n`);
 
 
 }

@@ -35,7 +35,7 @@ async function restoreFiles() {
         try {
             fs.renameSync(oldPath, newPath);
         } catch(err) {
-            console.log(`Failed to restore: ${file}`, err);
+            console.log(`\nFailed to restore: ${file}\n`, err);
         }
     }
 

@@ -30,11 +30,11 @@ async function permanentlyDeleteFiles() {
             fs.unlinkSync(deletePath);
             count++;
         } catch(err) {
-            console.log(`Failed to permanently delete: ${file}`, err);
+            console.log(`\nFailed to permanently delete: ${file}\n`, err);
         }
     }
 
-    console.log(`${count} file(s) have been permanently deleted.`)
+    console.log(`\n${count} file(s) have been permanently deleted.\n`)
 }
 
 
