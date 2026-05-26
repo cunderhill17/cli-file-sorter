@@ -38,7 +38,6 @@ async function restoreFiles() {
             count++;
         } catch(err) {
             console.log(`\nFailed to restore: ${file}\n`, err);
-            return;
         }
     }
 
