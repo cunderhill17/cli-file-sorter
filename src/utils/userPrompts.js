@@ -1,11 +1,3 @@
-// Importing program files
-
-
-// importing node.js modules
-const fs = require('fs');
-
-
-
 // Variables 
 const commandArr = {
     "move":             "MOVE: <starting directory path> <new directory> <file extensions> \n\n",
@@ -43,6 +35,8 @@ const commandArr = {
     "noCommand": "\n\n Please select a command or hit enter to exit \n\n"
 }
 
+
+
 function prompt(sysCommand) {
     const readline = require('node:readline');
     const {stdin: input, stdout: output} = require('node:process');
@@ -56,6 +50,8 @@ function prompt(sysCommand) {
       });
     });
 }
+
+
 
 // EXPORTS
 
