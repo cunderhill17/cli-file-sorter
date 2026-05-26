@@ -31,7 +31,7 @@ async function softDelete({userCommand}) {
     }
 
     const [newCommand, ...unusedNewCommandInput] = await prompt('noCommand');
-    !newCommand ? process.exit(0) : userCommand(newCommand);
+    !newCommand ? userCommand('exit') : userCommand(newCommand);
 
 }
 

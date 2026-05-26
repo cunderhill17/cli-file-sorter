@@ -13,7 +13,7 @@ restore:    restores files from tash bin to current working directory
 exit:       closes the program (all changes made will be final)\n`);
 
     const [newCommand, ...unusedInput] = await prompt('noCommand');
-    !newCommand ? process.exit(0) : userCommand(newCommand);
+    !newCommand ? userCommand('exit') : userCommand(newCommand);
 
 }
 
