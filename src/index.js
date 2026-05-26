@@ -4,6 +4,7 @@ const { listFiles } = require('./commands/list');
 const { showHelp } = require('./commands/help');
 const { softDelete } = require('./commands/delete');
 const { restoreDeletedFiles } = require('./commands/restore');
+const { emptyTrashBin } = require('./commands/emptyTrash');
 
 const [command, ...rest] = process.argv.slice(2);
 
@@ -19,6 +20,7 @@ function userCommand(command) {
             break;
         
         case 'exit':
+            console.log('Thank you for using FileSort!');
             process.exit(0);
 
         case 'delete':
@@ -27,6 +29,10 @@ function userCommand(command) {
 
         case 'restore':
             restoreDeletedFiles({userCommand});
+            break;
+
+        case 'empty':
+            emptyTrashBin({userCommand});
             break;
             
         default:

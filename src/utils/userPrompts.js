@@ -38,6 +38,8 @@ const commandArr = {
     
     "restoreFiles": "\n\n Please confirm whether you'd like to restore any currently deleted files. (Y/N) \n\n",
 
+    "emptyTrash": "\n\n Please confirm whether you'd like to empty the trash bin. (Y/N) \n\n",
+
     "noCommand": "\n\n Please select a command or hit enter to exit \n\n"
 }
 
