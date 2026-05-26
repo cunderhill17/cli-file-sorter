@@ -14,7 +14,7 @@ async function restoreDeletedFiles({userCommand}) {
         await restoreFiles();
     }
 
-    const [newCommand, ...rest] = await prompt('noCommand');
+    const [newCommand, ...unusedNewCommandInput] = await prompt('noCommand');
     !newCommand ? process.exit(0) : userCommand(newCommand);
 }
 

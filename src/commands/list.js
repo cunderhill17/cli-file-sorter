@@ -34,7 +34,7 @@ async function listFiles({userCommand}) {
         }
     }
 
-    const [newCommand, ...rest] = await prompt('noCommand');
+    const [newCommand, ...unusedInput] = await prompt('noCommand');
     !newCommand ? process.exit(0) : userCommand(newCommand);
 }
 
