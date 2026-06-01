@@ -1,10 +1,10 @@
 {
-  "name": "filesorter",
-  "version": "1.0.0",
+  "name": "@cunderhill17/filesorter",
+  "version": "1.0.1",
   "description": "A command-line tool for sorting, deleting, restoring, and organizing files.",
   "license": "MIT",
   "bin": {
-    "filesorter": "./bin/filesort.js"
+    "filesorter": "bin/filesort.js"
   },
   "devDependencies": {
     "jest": "^30.4.2"
