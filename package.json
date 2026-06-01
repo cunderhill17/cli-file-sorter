@@ -1,5 +1,8 @@
 {
   "name": "filesorter",
+  "version": "1.0.0",
+  "description": "A command-line tool for sorting, deleting, restoring, and organizing files.",
+  "license": "MIT",
   "bin": {
     "filesorter": "./bin/filesort.js"
   },
