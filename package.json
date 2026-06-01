@@ -1,7 +1,7 @@
 {
-  "name": "filesort",
+  "name": "filesorter",
   "bin": {
-    "filesort": "./bin/filesort.js"
+    "filesorter": "./bin/filesort.js"
   },
   "devDependencies": {
     "jest": "^30.4.2"
